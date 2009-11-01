@@ -17,6 +17,8 @@ that take a little longer to check than sha1(salt + hash). bcrypt
 and pbkdf2 have parametric complexity so they can be made stronger as
 computers continue to get faster.
 
+cryptacular ships with 100% test coverage.
+
 cryptacular.core
 ----------------
 
