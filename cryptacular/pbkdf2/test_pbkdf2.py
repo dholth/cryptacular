@@ -4,6 +4,7 @@
 # This code may be freely used and modified for any purpose.
 from nose.tools import eq_, raises, assert_not_equal
 from cryptacular.pbkdf2 import PBKDF2PasswordManager
+from binascii import hexlify, unhexlify
 from pbkdf2 import *
 
 def test():

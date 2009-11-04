@@ -1,0 +1,10 @@
+0.2
+===
+
+- ``cryptacular`` is now a namespace package. Compatible password hashing
+  implementations can go under ``cryptacular``.``name``
+
+0.1
+===
+
+- Initial release

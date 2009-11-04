@@ -14,8 +14,8 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [ ]
 
 setup(name='cryptacular',
-      version='0.1',
-      description='A pbkdf2 and public-domain bcrypt password hashing framework.',
+      version='0.2',
+      description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
         "Development Status :: 3 - Alpha",
@@ -28,10 +28,12 @@ setup(name='cryptacular',
       keywords='bcrypt password security pbkdf2 crypt hash',
       license='MIT',
       packages=find_packages(),
+      namespace_packages = ['cryptacular'],
       include_package_data=True,
       zip_safe=False,
       install_requires = requires,
       tests_require = requires,
+      test_suite = 'nose.collector',
       ext_modules=[
           Extension('cryptacular.bcrypt._bcrypt',
               sources = [

@@ -13,7 +13,6 @@
 
 import sys
 import hmac
-from binascii import hexlify, unhexlify
 from struct import pack
 try:
     # only in python 2.5
