@@ -43,6 +43,7 @@ setup(name='cryptacular',
               # how do I compile .S with distutils?
               # 'crypt_blowfish-1.0.3/x86.S', 
               ],
+              define_macros = [ ('NO_BF_ASM', None) ],
               include_dirs = [
               'crypt_blowfish-1.0.3/',
               ]

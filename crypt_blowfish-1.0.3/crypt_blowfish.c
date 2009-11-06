@@ -45,7 +45,11 @@
 #endif
 
 #ifdef __i386__
+#ifdef NO_BF_ASM
+#define BF_ASM				0
+#else
 #define BF_ASM				1
+#endif
 #define BF_SCALE			1
 #elif defined(__x86_64__) || defined(__alpha__) || defined(__hppa__)
 #define BF_ASM				0
