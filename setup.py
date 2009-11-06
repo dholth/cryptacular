@@ -14,7 +14,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [ ]
 
 setup(name='cryptacular',
-      version='0.2',
+      version='0.3',
       description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
