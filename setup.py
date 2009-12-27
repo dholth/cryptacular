@@ -1,9 +1,6 @@
 import os
 import sys
 
-from ez_setup import use_setuptools
-use_setuptools()
-
 from setuptools import setup, find_packages
 from distutils.core import Extension
 
@@ -14,7 +11,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [ ]
 
 setup(name='cryptacular',
-      version='0.3',
+      version='0.4',
       description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
@@ -31,7 +28,7 @@ setup(name='cryptacular',
       namespace_packages = ['cryptacular'],
       include_package_data=True,
       zip_safe=False,
-      install_requires = requires,
+      install_requires = ['setuptools'],
       tests_require = requires,
       test_suite = 'nose.collector',
       ext_modules=[
