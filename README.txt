@@ -1,31 +1,51 @@
 cryptacular
 ===========
 
-cryptacular is a collection of password hashing functions that share a
-common interface. It's designed to make it easy for you to migrate away
-from your half-assed custom password scheme. Use bcrypt if you are able
-to run C code in your Python and pbkdf2 if you are not.
+cryptacular is a collection of strong password hashing functions that
+share a common interface, and a nice way to use bcrypt as a password
+hash. It's designed to make it easy for you to migrate away from your
+half-assed custom password scheme. Compared with popular choices like
+plain text or single rounds of md5 or sha, strong password hashes greatly
+increase the computational cost of obtaining users' passwords from a
+leaked password database.
 
-cryptacular's interface was inspired by zope.password. Unlike
-zope.password it includes schemes that are strong enough for modern use
-and it does not depend on zope.
+cryptacular's interface was inspired by zope.password but cryptacular does
+not depend on zope and implements much stronger algorithms. cryptacular
+also provides a convenient way to recognize and upgrade obsolete password
+hashes on the fly when users log in with their correct password.
+
+`z3c.bcrypt`_ integrates cryptacular into zope.password.
 
 http://chargen.matasano.com/chargen/2007/9/7/enough-with-the-rainbow-tables-what-you-need-to-know-about-s.html
 explains why bcrypt is a good idea. Computers are fast now. To protect
-our users against a leaked password database, we should use password hashes
-that take a little longer to check than sha1(salt + hash). bcrypt
-and pbkdf2 have parametric complexity so they can be made stronger as
-computers continue to get faster.
+our users against a leaked password database, we should use password
+hashes that take a little longer to check than sha1(salt + hash). bcrypt
+and pbkdf2 have this property. They also have parametric complexity so
+they can be made stronger as computers continue to get faster.
 
 cryptacular ships with 100% test coverage.
+
+.. _`z3c.bcrypt`: http://pypi.python.org/pypi/z3c.bcrypt
 
 cryptacular.core
 ----------------
 
-``cryptacular.core`` defines the DelegatingPasswordManager and the
-interfaces PasswordChecker and PasswordManager. DelegatingPasswordManager
-fallbacks are PasswordChecker instances that need not implement password
-encoding, e.g. do not implement InsecurePasswordScheme().encode()
+``cryptacular.core`` defines the ``DelegatingPasswordManager``
+and the interfaces (abstract base classes) ``PasswordChecker`` and
+``PasswordManager``.
+
+``DelegatingPasswordManager`` is the recommended way to use
+cryptacular. ``DelegatingPasswordManager`` holds a preferred
+``cryptacular.core.PasswordManager`` instance that can
+encode and check password hashes and a list of fallback
+``cryptacular.core.PasswordChecker`` instances that are only
+required to be able to check password hashes (no need to implement
+``InsecurePasswordHash.encode()``). When asked to check a password hash
+against a plaintext password, ``DelegatingPasswordManager`` finds the
+first item in its list that understands the given hash format and uses
+it to check the password. If the password was correct but not in the
+preferred hash format, ``DelegatingPasswordManager`` will re-hash the given
+password using its preferred ``PasswordManager``.
 
 >>> import cryptacular.core
 >>> import cryptacular.bcrypt
@@ -59,7 +79,7 @@ True
 cryptacular.bcrypt
 ------------------
 
-``cryptacular.bcrypt`` uses ctypes to access the public-domain
+``cryptacular.bcrypt`` uses a C extension module to call the public-domain
 crypt_blowfish (http://www.openwall.com/crypt/) which is bundled with
 cryptacular. You should use this if you can.
 
@@ -68,5 +88,6 @@ cryptacular.pbkdf2
 
 ``cryptacular.pbkdf2`` applies the pbkdf2 key derivation algorithm
 described in RFC 2898 as a password hash. It uses M2Crypto.EVP.pbkdf2
-with a Python fallback when M2Crypto is not available.
+with a Python fallback when M2Crypto is not available. You can use this
+even if you cannot run C extension modules in your Python.
 
