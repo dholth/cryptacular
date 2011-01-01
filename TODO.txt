@@ -1,0 +1,6 @@
+TODO
+====
+
+- Integrate crypt_blowfish 1.0.4? It is a very minor change.
+- Release egg with _bcrypt.dll compiled for Windows.
+
