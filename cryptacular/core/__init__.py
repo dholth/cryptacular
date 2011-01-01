@@ -73,7 +73,7 @@ class DelegatingPasswordManager(object):
                     setter(self.preferred.encode(password))
                 return valid
 
-        raise ValueError("No configured password manager for 'encoded'")
+        raise ValueError("No configured password manager for given hash.")
 
     def match(self, encoded):
         return True in [m.match(encoded) for m in self._managers]

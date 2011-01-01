@@ -23,7 +23,7 @@ __all__ = ['PBKDF2PasswordManager']
 import os
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
-try:
+try: # pragma NO COVERAGE
     import M2Crypto.EVP
     _pbkdf2 = M2Crypto.EVP.pbkdf2
 except (ImportError, AttributeError): # pragma NO COVERAGE

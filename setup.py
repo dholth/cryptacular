@@ -11,7 +11,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [ ]
 
 setup(name='cryptacular',
-      version='0.4',
+      version='0.5',
       description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
@@ -37,6 +37,7 @@ setup(name='cryptacular',
               'crypt_blowfish-1.0.3/crypt_blowfish.c',
               'crypt_blowfish-1.0.3/crypt_gensalt.c',
               'crypt_blowfish-1.0.3/wrapper.c',
+              'cryptacular/bcrypt/_bcrypt.c',
               # how do I compile .S with distutils?
               # 'crypt_blowfish-1.0.3/x86.S', 
               ],

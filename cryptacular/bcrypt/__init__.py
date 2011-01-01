@@ -22,22 +22,8 @@ __all__ = ['BCRYPTPasswordManager']
 
 import os
 import re
-from ctypes import cdll
-from ctypes import c_char_p, c_void_p, c_int, c_ulong, create_string_buffer
 
-_bcrypt = cdll.LoadLibrary(
-        os.path.join(os.path.dirname(__file__), '_bcrypt.so')
-        )
-
-# char *crypt_rn(const char *key, const char *setting, void *data, int size);
-_bcrypt.crypt_rn.restype = c_char_p
-_bcrypt.crypt_rn.argtypes = [c_char_p, c_char_p, c_void_p, c_int]
-
-# char *crypt_gensalt_rn(const char * prefix, unsigned long count,
-#                        const char *input, int size,
-#                        char *output, int output_size);
-_bcrypt.crypt_gensalt_rn.restype = c_char_p
-_bcrypt.crypt_gensalt_rn.argtypes = [c_char_p, c_ulong, c_char_p, c_int, c_char_p, c_int]
+from cryptacular.bcrypt._bcrypt import crypt_rn, crypt_gensalt_rn
 
 class BCRYPTPasswordManager(object):
 
@@ -51,17 +37,14 @@ class BCRYPTPasswordManager(object):
 
         Note: only the first 72 characters of password are significant.
         """
-        settings = create_string_buffer(30)
-        data = create_string_buffer(61)
-        salt = os.urandom(16)
-        rc = _bcrypt.crypt_gensalt_rn('$2a$', 10, salt, len(salt), settings, len(settings))
-        if rc is None:
+        settings = crypt_gensalt_rn('$2a$', 10, os.urandom(16))
+        if settings is None:
             raise ValueError("_bcrypt.crypt_gensalt_rn returned None") # pragma NO COVERAGE
         if isinstance(password, unicode):
             password = password.encode('utf-8')
         if not isinstance(password, str):
             raise TypeError("password must be a str")
-        rc = _bcrypt.crypt_rn(password, settings, data, len(data))
+        rc = crypt_rn(password, settings)
         if rc is None: 
             raise ValueError("_bcrypt.crypt_rn returned None") # pragma NO COVERAGE
         return rc
@@ -78,8 +61,7 @@ class BCRYPTPasswordManager(object):
             raise TypeError("encoded must be a str")
         if not self.match(encoded):
             return False
-        data = create_string_buffer(61)
-        rc = _bcrypt.crypt_rn(password, encoded, data, len(data))
+        rc = crypt_rn(password, encoded)
         if rc is None:
             raise ValueError("_bcrypt.crypt_rn returned None")
         return rc == encoded
