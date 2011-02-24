@@ -3,6 +3,10 @@
 - Add cryptacular.crypt.CRYPTPasswordManager(prefix) based on Python's
   builtin crypt(). Why didn't I think of this before?!
 
+0.5.1
+=====
+- Verified to compile under Windows.
+
 0.5
 ===
 - use normal Python extension module instead of ctypes for bcrypt
