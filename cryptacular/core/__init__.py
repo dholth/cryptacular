@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (c) 2009 Daniel Holth <dholth@fastmail.fm>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

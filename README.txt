@@ -91,3 +91,22 @@ described in RFC 2898 as a password hash. It uses M2Crypto.EVP.pbkdf2
 with a Python fallback when M2Crypto is not available. You can use this
 even if you cannot run C extension modules in your Python.
 
+cryptacular.crypt
+-----------------
+
+``cryptacular.crypt`` uses Python's builtin ``crypt`` module, available on
+Unix, to hash passwords. It takes a string such as '$1$' as an argument
+to determine which kind of hash the underlying ``crypt()`` function will
+produce (see ``man crypt`` for details). ``crypt()`` can even provide
+bcrypt hashes if you are lucky; the SHA hashes invented for RedHat are also
+good.
+
+On my Ubuntu system::
+
+    from cryptacular.crypt import CRYPTPasswordManager, SHA256CRYPT
+    manager = CRYPTPasswordManager(SHA256CRYPT)
+    manager.encode('secret')
+    >>> '$5$Ka9M/5GqJWMCnLI7$ZR0k9g2NlnXvgjjDYmobVUuLzfn/Tmo.vnW4WvW5Tx/'
+    manager.encode('secret')
+    >>> '$5$o4RUq2zuVWYWZpuq$35VyAVxfeL4sQ9//ODNw8jIDW7khJ5s0lUlXCHJ6WZ2'
+

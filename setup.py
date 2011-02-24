@@ -11,13 +11,14 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [ ]
 
 setup(name='cryptacular',
-      version='0.5.1',
+      version='0.9',
       description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Programming Language :: Python",
+        "Programming Language :: C",
         ],
       author='Daniel Holth',
       author_email='dholth@fastmail.fm',
