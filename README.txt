@@ -1,6 +1,14 @@
 cryptacular
 ===========
 
+Hash responsibly::
+
+    from cryptacular.bcrypt import BCRYPTPasswordManager
+    manager = BCRYPTPasswordManager()
+    hashed = manager.encode('password')
+    if manager.check(hashed, 'password'):
+        pass # let them in
+
 cryptacular is a collection of strong password hashing functions that
 share a common interface, and a nice way to use bcrypt as a password
 hash. It's designed to make it easy for you to migrate away from your
