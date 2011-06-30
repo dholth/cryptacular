@@ -29,15 +29,18 @@ class BCRYPTPasswordManager(object):
 
     SCHEME = "BCRYPT"
     PREFIX = "$2a$"
+    WORK_FACTOR = 10
 
     _bcrypt_syntax = re.compile('\$2a\$[0-9]{2}\$[./A-Za-z0-9]{53}')
 
-    def encode(self, password):
+    def encode(self, password, work_factor=None):
         """Hash a password using bcrypt.
 
         Note: only the first 72 characters of password are significant.
         """
-        settings = crypt_gensalt_rn('$2a$', 10, os.urandom(16))
+        if work_factor is None:
+            work_factor = self.WORK_FACTOR
+        settings = crypt_gensalt_rn('$2a$', work_factor, os.urandom(16))
         if settings is None:
             raise ValueError("_bcrypt.crypt_gensalt_rn returned None") # pragma NO COVERAGE
         if isinstance(password, unicode):
@@ -45,7 +48,7 @@ class BCRYPTPasswordManager(object):
         if not isinstance(password, str):
             raise TypeError("password must be a str")
         rc = crypt_rn(password, settings)
-        if rc is None: 
+        if rc is None:
             raise ValueError("_bcrypt.crypt_rn returned None") # pragma NO COVERAGE
         return rc
 
