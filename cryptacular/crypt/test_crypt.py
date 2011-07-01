@@ -10,11 +10,11 @@ class TestCRYPTPasswordManager(object):
         self.manager = CRYPTPasswordManager(self.PREFIX)
 
     @raises(TypeError)
-    def test_None1(self):    
+    def test_None1(self):
         self.manager.encode(None)
 
     @raises(TypeError)
-    def test_None2(self):    
+    def test_None2(self):
         self.manager.check(None, 'xyzzy')
 
     @raises(TypeError)
@@ -71,5 +71,5 @@ def test_oddcrypt():
     """crypt.crypt with empty prefix returns hash != 13 characters?"""
     class BCPM(CRYPTPasswordManager):
         _crypt = lambda x, y, z: '4' * 14
-    BCPM('') 
+    BCPM('')
 
