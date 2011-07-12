@@ -17,7 +17,7 @@ def test():
     ret = pbkdf2( password, salt, itercount, keylen )
     hexret = ' '.join(map(lambda c: '%02x' % ord(c), ret)).upper()
     eq_(hexret, "6A 89 70 BF 68 C9 2C AE A8 4A 8D F2 85 10 85 86")
-    
+
     # from botan
     password = unhexlify('6561696D72627A70636F706275736171746B6D77')
     expect = 'C9A0B2622F13916036E29E7462E206E8BA5B50CE9212752EB8EA2A4AA7B40A4CC1BF'
@@ -35,7 +35,8 @@ def test_passwordmanager():
     manager = PBKDF2PasswordManager()
     # Never call .encode with a salt.
     salt = urlsafe_b64decode('ZxK4ZBJCfQg=')
-    hash = manager.encode(u"hashy the \N{SNOWMAN}", salt)
+    text = u"hashy the \N{SNOWMAN}"
+    hash = manager.encode(text, salt)
     eq_(hash, '$p5k2$1000$ZxK4ZBJCfQg=$jJZVscWtO--p1-xIZl6jhO2LKR0=')
     password = "xyzzy"
     hash = manager.encode(password)
@@ -43,10 +44,13 @@ def test_passwordmanager():
     assert manager.check(unicode(hash), password)
     assert not manager.check(password, password)
     assert_not_equal(manager.encode(password), manager.encode(password))
+    hash = manager.encode(text, salt, rounds=1)
+    eq_(hash, "$p5k2$1$ZxK4ZBJCfQg=$Kexp0NAVgxlDwoA-TS34o8o2Okg=")
+    assert manager.check(hash, text)
 
 @raises(ValueError)
 def test_xorstr():
     xorstr('foo', 'quux')
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     test() # pragma: NO COVERAGE

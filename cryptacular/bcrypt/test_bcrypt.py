@@ -34,6 +34,14 @@ class TestBCRYPTPasswordManager(object):
         assert_true(manager.match(short_hash))
         manager.check(short_hash, self.snowpass)
 
+    @raises(ValueError)
+    def test_too_few_rounds(self):
+        self.manager.encode(self.snowpass, rounds=1)
+
+    @raises(ValueError)
+    def test_too_many_rounds(self):
+        self.manager.encode(self.snowpass, rounds=100)
+
     def test_emptypass(self):
         self.manager.encode('')
 
@@ -49,3 +57,5 @@ class TestBCRYPTPasswordManager(object):
         assert_true(manager.check(unicode(hash), password))
         assert_false(manager.check(password, password))
         assert_not_equal(manager.encode(password), manager.encode(password))
+        hash = manager.encode(password, rounds=4)
+        assert_true(manager.check(hash, password))

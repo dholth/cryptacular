@@ -50,17 +50,22 @@ class TestCRYPTPasswordManager(object):
         assert_false(manager.check(password, password))
         assert_not_equal(manager.encode(password), manager.encode(password))
 
-class TestCPM_MD5CRYPT(TestCRYPTPasswordManager):
-    PREFIX = BCRYPT
 
-class TestCPM_MD5CRYPT(TestCRYPTPasswordManager):
-    PREFIX = MD5CRYPT
+if available(BCRYPT):
+    class TestCPM_BCRYPT(TestCRYPTPasswordManager):
+        PREFIX = BCRYPT
 
-class TestCPM_MD5CRYPT(TestCRYPTPasswordManager):
-    PREFIX = SHA256CRYPT
+if available(MD5CRYPT):
+    class TestCPM_MD5CRYPT(TestCRYPTPasswordManager):
+        PREFIX = MD5CRYPT
 
-class TestCPM_MD5CRYPT(TestCRYPTPasswordManager):
-    PREFIX = SHA512CRYPT
+if available(SHA256CRYPT):
+    class TestCPM_SHA256CRYPT(TestCRYPTPasswordManager):
+        PREFIX = SHA256CRYPT
+
+if available(SHA512CRYPT):
+    class TestCPM_SHA512CRYPT(TestCRYPTPasswordManager):
+        PREFIX = SHA512CRYPT
 
 @raises(NotImplementedError)
 def test_bogocrypt():
@@ -72,4 +77,3 @@ def test_oddcrypt():
     class BCPM(CRYPTPasswordManager):
         _crypt = lambda x, y, z: '4' * 14
     BCPM('')
-

@@ -34,16 +34,18 @@ class PBKDF2PasswordManager(object):
 
     SCHEME = "PBKDF2"
     PREFIX = "$p5k2$"
+    ROUNDS = 1<<12
 
-    def encode(self, password, salt=None, iter=1<<12, keylen=20):
+    def encode(self, password, salt=None, rounds=None, keylen=20):
         if salt is None:
             salt = os.urandom(16)
+        rounds = rounds or self.ROUNDS
         if isinstance(password, unicode):
             password = password.encode("utf-8")
-        key = _pbkdf2(password, salt, iter, keylen)
+        key = _pbkdf2(password, salt, rounds, keylen)
         hash = "%s%x$%s$%s" % (
-                self.PREFIX, 
-                iter, 
+                self.PREFIX,
+                rounds,
                 urlsafe_b64encode(salt),
                 urlsafe_b64encode(key))
         return hash
