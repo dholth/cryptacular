@@ -40,6 +40,8 @@ import re
 import crypt
 import base64
 
+import cryptacular.core
+
 OLDCRYPT = ""
 BCRYPT = "$2a$"
 MD5CRYPT = "$1$"
@@ -87,7 +89,7 @@ class CRYPTPasswordManager(object):
         if not self.match(encoded):
             return False
         rc = self._crypt(password, encoded)
-        return rc == encoded
+        return cryptacular.core._cmp(rc, encoded)
 
     def match(self, hash):
         """Return True if hash starts with our prefix."""

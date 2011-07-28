@@ -22,7 +22,7 @@ __all__ = ['PBKDF2PasswordManager']
 
 import os
 from base64 import urlsafe_b64encode, urlsafe_b64decode
-
+import cryptacular.core
 try: # pragma NO COVERAGE
     import M2Crypto.EVP
     _pbkdf2 = M2Crypto.EVP.pbkdf2
@@ -60,7 +60,7 @@ class PBKDF2PasswordManager(object):
         salt = urlsafe_b64decode(salt)
         keylen = len(urlsafe_b64decode(key))
         hash = self.encode(password, salt, iter, keylen)
-        return hash == encoded
+        return cryptacular.core._cmp(hash, encoded)
 
     def match(self, encoded):
         """True if encoded appears to match this scheme."""

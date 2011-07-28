@@ -29,7 +29,7 @@ class PasswordChecker(object):
 
     def check(self, encoded, password):
         """Return True if 'password' hashes to 'encoded' in this scheme.
-        
+
         Most password schemes require encoded and password to be byte
         strings. The schemes included with this package convert unicode
         'encoded' and 'password' to utf-8 as necessary."""
@@ -80,3 +80,13 @@ class DelegatingPasswordManager(object):
     def match(self, encoded):
         return True in [m.match(encoded) for m in self._managers]
 
+
+def _cmp(a, b):
+    """Constant-time comparison"""
+    if len(a) != len(b):
+        return False
+
+    result = 0
+    for x, y in zip(a, b):
+        result |= ord(x) ^ ord(y)
+    return result == 0

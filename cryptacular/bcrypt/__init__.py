@@ -24,6 +24,7 @@ import os
 import re
 
 from cryptacular.bcrypt._bcrypt import crypt_rn, crypt_gensalt_rn
+import cryptacular.core
 
 class BCRYPTPasswordManager(object):
 
@@ -66,7 +67,7 @@ class BCRYPTPasswordManager(object):
         rc = crypt_rn(password, encoded)
         if rc is None:
             raise ValueError("_bcrypt.crypt_rn returned None")
-        return rc == encoded
+        return cryptacular.core._cmp(rc, encoded)
 
     def match(self, hash):
         """Return True if hash looks like a BCRYPT password hash."""
