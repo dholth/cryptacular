@@ -7,3 +7,4 @@ syntax:glob
 *.egg-info/*
 _build/*
 build/*
+dist/*
