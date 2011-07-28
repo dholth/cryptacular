@@ -1,3 +1,7 @@
+1.2.1
+=====
+- Constant-time comparison of hashes
+
 1.2
 ===
 - Update to crypt_blowfish 1.2 (which fixes CVE-2011-2483, 8-bit character
