@@ -8,7 +8,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-requires = [ ]
+tests_require = ["nose", "coverage"]
 
 setup(name='cryptacular',
       version='1.2',
@@ -31,7 +31,8 @@ setup(name='cryptacular',
       include_package_data=True,
       zip_safe=False,
       install_requires = ['setuptools'],
-      tests_require = requires,
+      tests_require = tests_require,
+      extras_require = dict(test=tests_require),
       test_suite = 'nose.collector',
       ext_modules=[
           Extension('cryptacular.bcrypt._bcrypt',

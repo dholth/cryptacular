@@ -33,7 +33,7 @@ Usage::
 # THE SOFTWARE.
 
 __all__ = ['CRYPTPasswordManager', 'OLDCRYPT', 'MD5CRYPT', 'SHA256CRYPT',
-    'SHA512CRYPT', 'BCRYPT']
+    'SHA512CRYPT', 'BCRYPT', 'available']
 
 import os
 import re
@@ -46,18 +46,23 @@ MD5CRYPT = "$1$"
 SHA256CRYPT = "$5$"
 SHA512CRYPT = "$6$"
 
+def available(prefix, _crypt=crypt.crypt):
+    # Lame 'is implemented' check.
+    l = len(_crypt('implemented?', prefix + 'xyzzy'))
+    if prefix == OLDCRYPT:
+        if l != 13:
+           return False
+    elif l < 26:
+        return False
+    return True
+
 class CRYPTPasswordManager(object):
     _crypt = crypt.crypt
     def __init__(self, prefix):
         """prefix: $1$ etc. indicating hashing scheme."""
         self.PREFIX = prefix
-        # Lame 'is implemented' check.
-        l = len(self._crypt('implemented?', prefix + 'xyzzy'))
-        if prefix == OLDCRYPT:
-            if l != 13:
-                raise NotImplementedError()
-        elif l < 26:
-            raise NotImplementedError()
+        if not available(prefix, self._crypt):
+            raise NotImplementedError
 
     def encode(self, password):
         """Hash a password using the builtin crypt module."""
