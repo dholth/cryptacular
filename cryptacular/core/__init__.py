@@ -20,7 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['DelegatingPasswordManager', 'PasswordChecker', 'PasswordManager']
+__all__ = [
+    'DelegatingPasswordManager',
+    'PasswordChecker',
+    'PasswordManager',
+    'check_unicode'
+]
+
+
+if 'unicode' in __builtins__:
+    def check_unicode(text):
+        if isinstance(text, unicode):
+            text = text.encode('utf-8')
+        return text
+else:
+    def check_unicode(text):
+        return text
+
 
 class PasswordChecker(object):
 
@@ -32,7 +48,8 @@ class PasswordChecker(object):
 
         Most password schemes require encoded and password to be byte
         strings. The schemes included with this package convert unicode
-        'encoded' and 'password' to utf-8 as necessary."""
+        'encoded' and 'password' to utf-8 as necessary.
+        """
         raise NotImplementedError()
 
     def match(self, encoded):
@@ -41,11 +58,14 @@ class PasswordChecker(object):
         Most password schemes include a recognizable prefix in their hashes."""
         return encoded.startswith(self.PREFIX)
 
+
 class PasswordManager(PasswordChecker):
 
     def encode(self, password):
-        """Return hash of 'password' using this scheme."""
+        """Return hash of 'password' using this scheme.
+        """
         raise NotImplementedError()
+
 
 class DelegatingPasswordManager(object):
 
@@ -82,7 +102,8 @@ class DelegatingPasswordManager(object):
 
 
 def _cmp(a, b):
-    """Constant-time comparison"""
+    """Constant-time comparison.
+    """
     if len(a) != len(b):
         return False
 

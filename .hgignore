@@ -1,10 +1,9 @@
-syntax:glob
-*~
-.*
-*.pyc
-*.o
-*.so
-*.egg-info/*
-_build/*
-build/*
-dist/*
+syntax: regexp
+
+\.hgignore
+^py2-env/
+^py3-env/
+^build/
+^cryptacular\.egg-info/
+^dist/
+.*?\.pyc
