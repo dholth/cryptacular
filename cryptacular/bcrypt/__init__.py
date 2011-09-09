@@ -30,13 +30,13 @@ from cryptacular.core import _cmp, check_unicode
 
 class BCRYPTPasswordManager(object):
 
-    SCHEME = 'BCRYPT'
-    PREFIX = '$2a$'
-    ROUNDS = 10
+    _scheme = 'BCRYPT'
+    _prefix = '$2a$'
+    _rounds = 10
 
     _bcrypt_syntax = re.compile('\$2a\$[0-9]{2}\$[./A-Za-z0-9]{53}')
 
-    def encode(self, password, rounds=None):
+    def encode(self, text, rounds=None):
         '''Hash a password using bcrypt.
 
         Note: only the first 72 characters of password are significant.
@@ -52,10 +52,10 @@ class BCRYPTPasswordManager(object):
 
         return encoded
 
-    def check(self, encoded, password):
+    def check(self, encoded, text):
         '''Check a bcrypt password hash against a password.
         '''
-        if not self.valid(encoded):
+        if not self.match(encoded):
             return False
 
         encoded_text = crypt_rn(check_unicode(text), encoded)
@@ -67,5 +67,5 @@ class BCRYPTPasswordManager(object):
     def match(self, hash):
         '''Return True if hash looks like a BCRYPT password hash.
         '''
-        return self._bcrypt_syntax.match(encoded) is not None
+        return self._bcrypt_syntax.match(hash) is not None
 
