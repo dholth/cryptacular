@@ -33,7 +33,7 @@ if 'unicode' in __builtins__:
         if isinstance(text, unicode):
             text = text.encode('utf-8')
         return text
-else:
+else: # pragma NO COVERAGE
     def check_unicode(text):
         return text
 

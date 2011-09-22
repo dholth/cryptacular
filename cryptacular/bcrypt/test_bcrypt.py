@@ -59,3 +59,25 @@ class TestBCRYPTPasswordManager(object):
         assert_not_equal(manager.encode(password), manager.encode(password))
         hash = manager.encode(password, rounds=4)
         assert_true(manager.check(hash, password))
+    
+    @raises(ValueError)
+    def test_fail_1(self):
+        def return_none(*args): return None
+        bcrypt = BCRYPTPasswordManager()
+        bcrypt.crypt_gensalt_rn = return_none
+        bcrypt.encode('foo')
+
+    @raises(ValueError)
+    def test_fail_2(self):
+        def return_none(*args): return None
+        bcrypt = BCRYPTPasswordManager()        
+        bcrypt.crypt_rn = return_none
+        bcrypt.encode('foo')
+
+    @raises(ValueError)
+    def test_fail_3(self):
+        def return_none(*args): return None
+        bcrypt = BCRYPTPasswordManager()
+        pw = bcrypt.encode('foobar')
+        bcrypt.crypt_rn = return_none
+        bcrypt.check(pw, 'foo')

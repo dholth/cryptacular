@@ -29,6 +29,9 @@ from cryptacular.core import _cmp, check_unicode
 
 
 class BCRYPTPasswordManager(object):
+    # for testing
+    crypt_rn = crypt_rn
+    crypt_gensalt_rn = crypt_gensalt_rn
 
     _scheme = 'BCRYPT'
     _prefix = '$2a$'
@@ -42,11 +45,11 @@ class BCRYPTPasswordManager(object):
         Note: only the first 72 characters of password are significant.
         '''
         rounds = rounds or self._rounds
-        settings = crypt_gensalt_rn(self._prefix, rounds, os.urandom(16))
+        settings = self.crypt_gensalt_rn(self._prefix, rounds, os.urandom(16))
         if settings is None:
             raise ValueError('_bcrypt.crypt_gensalt_rn returned None')
 
-        encoded = crypt_rn(check_unicode(text), settings)
+        encoded = self.crypt_rn(check_unicode(text), settings)
         if encoded is None:
             raise ValueError('_bcrypt.crypt_rn returned None')
 
@@ -58,7 +61,7 @@ class BCRYPTPasswordManager(object):
         if not self.match(encoded):
             return False
 
-        encoded_text = crypt_rn(check_unicode(text), encoded)
+        encoded_text = self.crypt_rn(check_unicode(text), encoded)
         if encoded_text is None:
             raise ValueError('_bcrypt.crypt_rn returned None')
 
