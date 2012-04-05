@@ -1,9 +1,16 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from nose.tools import eq_, raises, assert_false, assert_true, assert_not_equal
 import cryptacular.bcrypt
 from cryptacular.bcrypt import BCRYPTPasswordManager
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 class TestBCRYPTPasswordManager(object):
-    snowpass = u"hashy the \N{SNOWMAN}"
+    snowpass = "hashy the \N{SNOWMAN}"
 
     def setup(self):
         self.manager = BCRYPTPasswordManager()
