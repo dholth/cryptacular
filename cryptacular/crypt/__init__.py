@@ -33,11 +33,11 @@ Usage::
 # THE SOFTWARE.
 
 __all__ = ['CRYPTPasswordManager', 'OLDCRYPT', 'MD5CRYPT', 'SHA256CRYPT',
-    'SHA512CRYPT', 'BCRYPT', 'available']
+    'SHA512CRYPT', 'BCRYPT']
 
 import os
 import re
-import crypt
+import crypt as system_crypt
 import base64
 
 import cryptacular.core
@@ -48,22 +48,24 @@ MD5CRYPT = "$1$"
 SHA256CRYPT = "$5$"
 SHA512CRYPT = "$6$"
 
-def available(prefix, _crypt=crypt.crypt):
-    # Lame 'is implemented' check.
-    l = len(_crypt('implemented?', prefix + 'xyzzy'))
-    if prefix == OLDCRYPT:
-        if l != 13:
-           return False
-    elif l < 26:
-        return False
-    return True
 
 class CRYPTPasswordManager(object):
-    _crypt = crypt.crypt
+    _crypt = staticmethod(system_crypt.crypt)
+
+    def available(self, prefix):
+        # Lame 'is implemented' check.
+        l = len(self._crypt('implemented?', prefix + 'xyzzy'))
+        if prefix == OLDCRYPT:
+            if l != 13:
+               return False
+        elif l < 26:
+            return False
+        return True
+
     def __init__(self, prefix):
         """prefix: $1$ etc. indicating hashing scheme."""
         self.PREFIX = prefix
-        if not available(prefix, self._crypt):
+        if not self.available(prefix):
             raise NotImplementedError
 
     def encode(self, password):

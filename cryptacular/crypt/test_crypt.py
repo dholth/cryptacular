@@ -50,6 +50,7 @@ class TestCRYPTPasswordManager(object):
         assert_false(manager.check(password, password))
         assert_not_equal(manager.encode(password), manager.encode(password))
 
+available = CRYPTPasswordManager('').available
 
 if available(BCRYPT):
     class TestCPM_BCRYPT(TestCRYPTPasswordManager):
