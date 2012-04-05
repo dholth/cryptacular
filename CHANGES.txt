@@ -1,3 +1,8 @@
+1.3
+===
+- Python 3 support contributed by Frank Smit (some tests do not run)
+- Fix staticmethod issue with CRYPTPasswordManager
+
 1.2.1
 =====
 - Constant-time comparison of hashes

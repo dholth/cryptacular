@@ -27,7 +27,7 @@ try: # pragma NO COVERAGE
     import M2Crypto.EVP
     _pbkdf2 = M2Crypto.EVP.pbkdf2
 except (ImportError, AttributeError): # pragma NO COVERAGE
-    import pbkdf2
+    from . import pbkdf2
     _pbkdf2 = pbkdf2.pbkdf2
 
 class PBKDF2PasswordManager(object):
