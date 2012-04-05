@@ -33,8 +33,8 @@ class BCRYPTPasswordManager(object):
     crypt_rn = crypt_rn
     crypt_gensalt_rn = crypt_gensalt_rn
 
-    _scheme = 'BCRYPT'
-    _prefix = '$2a$'
+    SCHEME = 'BCRYPT'
+    PREFIX = '$2a$'
     _rounds = 10
 
     _bcrypt_syntax = re.compile('\$2a\$[0-9]{2}\$[./A-Za-z0-9]{53}')
@@ -45,7 +45,7 @@ class BCRYPTPasswordManager(object):
         Note: only the first 72 characters of password are significant.
         '''
         rounds = rounds or self._rounds
-        settings = self.crypt_gensalt_rn(self._prefix, rounds, os.urandom(16))
+        settings = self.crypt_gensalt_rn(self.PREFIX, rounds, os.urandom(16))
         if settings is None:
             raise ValueError('_bcrypt.crypt_gensalt_rn returned None')
 
