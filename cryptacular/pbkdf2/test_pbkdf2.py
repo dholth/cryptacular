@@ -36,15 +36,14 @@ def test_passwordmanager():
     salt = urlsafe_b64decode(b'ZxK4ZBJCfQg=')
     text = "hashy the \N{SNOWMAN}"
     hash = manager.encode(text, salt)
-    eq_(hash, b'$p5k2$1000$ZxK4ZBJCfQg=$jJZVscWtO--p1-xIZl6jhO2LKR0=')
-    password = b"xyzzy"
+    eq_(hash, '$p5k2$1000$ZxK4ZBJCfQg=$jJZVscWtO--p1-xIZl6jhO2LKR0=')
+    password = "xyzzy"
     hash = manager.encode(password)
     assert manager.check(hash, password)
-    assert manager.check(hash.decode('utf-8'), password)
     assert not manager.check(password, password)
     assert_not_equal(manager.encode(password), manager.encode(password))
     hash = manager.encode(text, salt, rounds=1)
-    eq_(hash, b"$p5k2$1$ZxK4ZBJCfQg=$Kexp0NAVgxlDwoA-TS34o8o2Okg=")
+    eq_(hash, "$p5k2$1$ZxK4ZBJCfQg=$Kexp0NAVgxlDwoA-TS34o8o2Okg=")
     assert manager.check(hash, text)
 
 if __name__ == "__main__":

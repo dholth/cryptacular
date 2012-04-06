@@ -35,8 +35,9 @@ if 'unicode' in __builtins__:
         return text
 else: # pragma NO COVERAGE
     def check_unicode(text):
-        if isinstance(text, str):
-            return text.encode('utf-8')
+        # In Python3, PyArg_ParseTuple("ss") in the builtin crypt module
+        # and our _bcrypt.c encodes unicode as utf-8, which falls short
+        # of dealing with bytes but is nearly what we want.
         return text
 
 

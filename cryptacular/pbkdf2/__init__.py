@@ -37,7 +37,7 @@ except (ImportError, AttributeError): # pragma NO COVERAGE
 class PBKDF2PasswordManager(object):
 
     SCHEME = "PBKDF2"
-    PREFIX = b"$p5k2$"
+    PREFIX = "$p5k2$"
     ROUNDS = 1<<12
 
     def encode(self, password, salt=None, rounds=None, keylen=20):
@@ -46,20 +46,20 @@ class PBKDF2PasswordManager(object):
         rounds = rounds or self.ROUNDS
         password = check_unicode(password)
         key = _pbkdf2(password, salt, rounds, keylen)
-        hash =  self.PREFIX + \
-                ('%x' % rounds).encode('ascii') + b'$' + \
+        hash =  self.PREFIX.encode('iso8859-1') + \
+                ('%x' % rounds).encode('iso8859-1') + b'$' + \
                 urlsafe_b64encode(salt) + b'$' + \
                 urlsafe_b64encode(key)
-        return hash
+        return hash.decode('utf-8')
 
     def check(self, encoded, password):
         encoded = check_unicode(encoded)
         if not self.match(encoded):
             return False
-        iter, salt, key = encoded[len(self.PREFIX):].split(b'$')
+        iter, salt, key = encoded[len(self.PREFIX):].split('$')
         iter = int(iter, 16)
-        salt = urlsafe_b64decode(salt)
-        keylen = len(urlsafe_b64decode(key))
+        salt = urlsafe_b64decode(salt.encode('utf-8'))
+        keylen = len(urlsafe_b64decode(key.encode('utf-8')))
         hash = self.encode(password, salt, iter, keylen)
         return cryptacular.core._cmp(hash, encoded)
 

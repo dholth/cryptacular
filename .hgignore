@@ -1,3 +1,11 @@
+syntax: glob
+*~
+*.swp
+*.orig
+*.egg
+*.so
+.coverage
+
 syntax: regexp
 
 \.hgignore
