@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import absolute_import
+
 __all__ = ['PBKDF2PasswordManager']
 
 import os
@@ -27,8 +29,9 @@ try: # pragma NO COVERAGE
     import M2Crypto.EVP
     _pbkdf2 = M2Crypto.EVP.pbkdf2
 except (ImportError, AttributeError): # pragma NO COVERAGE
-    from . import pbkdf2
-    _pbkdf2 = pbkdf2.pbkdf2
+    from pbkdf2 import PBKDF2
+    def _pbkdf2(password, salt, rounds, keylen):
+        return PBKDF2(password, salt, rounds).read(keylen)
 
 class PBKDF2PasswordManager(object):
 

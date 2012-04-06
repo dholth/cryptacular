@@ -5,11 +5,12 @@
 from nose.tools import eq_, raises, assert_not_equal
 from cryptacular.pbkdf2 import PBKDF2PasswordManager
 from binascii import hexlify, unhexlify
-from pbkdf2 import *
+
+import cryptacular.pbkdf2
+pbkdf2 = cryptacular.pbkdf2._pbkdf2
 
 def test():
     # test vector from rfc3211
-    password = 'password'
     salt = unhexlify( '1234567878563412' )
     password = 'All n-entities must communicate with other n-entities via n-1 entiteeheehees'
     itercount = 500
@@ -28,8 +29,6 @@ def test():
     hexret = hexlify(ret).upper()
     eq_(hexret, expect)
 
-    eq_(xorstr('foo', 'foo'), '\x00\x00\x00')
-
 def test_passwordmanager():
     from base64 import urlsafe_b64decode
     manager = PBKDF2PasswordManager()
@@ -47,10 +46,6 @@ def test_passwordmanager():
     hash = manager.encode(text, salt, rounds=1)
     eq_(hash, "$p5k2$1$ZxK4ZBJCfQg=$Kexp0NAVgxlDwoA-TS34o8o2Okg=")
     assert manager.check(hash, text)
-
-@raises(ValueError)
-def test_xorstr():
-    xorstr('foo', 'quux')
 
 if __name__ == "__main__":
     test() # pragma: NO COVERAGE
