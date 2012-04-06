@@ -40,6 +40,7 @@ import re
 import crypt as system_crypt
 import base64
 
+from cryptacular.core import check_unicode
 import cryptacular.core
 
 OLDCRYPT = ""
@@ -70,24 +71,16 @@ class CRYPTPasswordManager(object):
 
     def encode(self, password):
         """Hash a password using the builtin crypt module."""
-        salt = self.PREFIX + base64.b64encode(os.urandom(12), altchars='./')
-        if isinstance(password, unicode):
-            password = password.encode('utf-8')
-        if not isinstance(password, str):
-            raise TypeError("password must be a str")
+        salt = self.PREFIX
+        salt += base64.b64encode(os.urandom(12), altchars=b'./').decode('utf-8')
+        password = check_unicode(password)
         rc = self._crypt(password, salt)
         return rc
 
     def check(self, encoded, password):
         """Check a bcrypt password hash against a password."""
-        if isinstance(password, unicode):
-            password = password.encode('utf-8')
-        if isinstance(encoded, unicode):
-            encoded = encoded.encode('utf-8')
-        if not isinstance(password, str):
-            raise TypeError("password must be a str")
-        if not isinstance(encoded, str):
-            raise TypeError("encoded must be a str")
+        password = check_unicode(password)
+        encoded = check_unicode(encoded)
         if not self.match(encoded):
             return False
         rc = self._crypt(password, encoded)
