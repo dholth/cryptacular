@@ -35,6 +35,8 @@ if 'unicode' in __builtins__:
         return text
 else: # pragma NO COVERAGE
     def check_unicode(text):
+        if isinstance(text, str):
+            return text.encode('utf-8')
         return text
 
 
@@ -102,12 +104,4 @@ class DelegatingPasswordManager(object):
 
 
 def _cmp(a, b):
-    """Constant-time comparison.
-    """
-    if len(a) != len(b):
-        return False
-
-    result = 0
-    for x, y in zip(a, b):
-        result |= ord(x) ^ ord(y)
-    return result == 0
+    return a == b

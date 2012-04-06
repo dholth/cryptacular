@@ -24,6 +24,7 @@ __all__ = ['PBKDF2PasswordManager']
 
 import os
 from base64 import urlsafe_b64encode, urlsafe_b64decode
+from cryptacular.core import check_unicode
 import cryptacular.core
 try: # pragma NO COVERAGE
     import M2Crypto.EVP
@@ -36,29 +37,26 @@ except (ImportError, AttributeError): # pragma NO COVERAGE
 class PBKDF2PasswordManager(object):
 
     SCHEME = "PBKDF2"
-    PREFIX = "$p5k2$"
+    PREFIX = b"$p5k2$"
     ROUNDS = 1<<12
 
     def encode(self, password, salt=None, rounds=None, keylen=20):
         if salt is None:
             salt = os.urandom(16)
         rounds = rounds or self.ROUNDS
-        if isinstance(password, unicode):
-            password = password.encode("utf-8")
+        password = check_unicode(password)
         key = _pbkdf2(password, salt, rounds, keylen)
-        hash = "%s%x$%s$%s" % (
-                self.PREFIX,
-                rounds,
-                urlsafe_b64encode(salt),
-                urlsafe_b64encode(key))
+        hash =  self.PREFIX + \
+                ('%x' % rounds).encode('ascii') + b'$' + \
+                urlsafe_b64encode(salt) + b'$' + \
+                urlsafe_b64encode(key)
         return hash
 
     def check(self, encoded, password):
-        if isinstance(encoded, unicode):
-            encoded = encoded.encode("utf-8")
+        encoded = check_unicode(encoded)
         if not self.match(encoded):
             return False
-        iter, salt, key = encoded[len(self.PREFIX):].split('$')
+        iter, salt, key = encoded[len(self.PREFIX):].split(b'$')
         iter = int(iter, 16)
         salt = urlsafe_b64decode(salt)
         keylen = len(urlsafe_b64decode(key))
@@ -67,5 +65,6 @@ class PBKDF2PasswordManager(object):
 
     def match(self, encoded):
         """True if encoded appears to match this scheme."""
+        encoded = check_unicode(encoded)
         return encoded.startswith(self.PREFIX)
-
+ 
