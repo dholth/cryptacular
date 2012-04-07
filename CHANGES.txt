@@ -1,3 +1,9 @@
+1.4
+===
+- Tests all run under Python 3 (skipping doctest)
+- Use third-party pbkdf2 module for better Python 3 compatiblity
+- Drop support for Python < 2.6
+
 1.3
 ===
 - Python 3 support contributed by Frank Smit (some tests do not run)
