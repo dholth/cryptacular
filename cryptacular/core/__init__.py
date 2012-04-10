@@ -28,14 +28,15 @@ __all__ = [
 ]
 
 
-if 'unicode' in __builtins__: # pragma NO COVERAGE
+try:
+    unicode
     def check_unicode(text):
         if isinstance(text, unicode):
             text = text.encode('utf-8')
         if not isinstance(text, str):
             raise TypeError()
         return text
-else: # pragma NO COVERAGE
+except NameError:
     def check_unicode(text):
         # In Python3, PyArg_ParseTuple("ss") in the builtin crypt module
         # and our _bcrypt.c encodes unicode as utf-8, which falls short
