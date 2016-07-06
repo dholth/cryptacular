@@ -44,7 +44,7 @@ from cryptacular.core import check_unicode
 import cryptacular.core
 
 OLDCRYPT = ""
-BCRYPT = "$2a$"
+BCRYPT = "$2b$"
 MD5CRYPT = "$1$"
 SHA256CRYPT = "$5$"
 SHA512CRYPT = "$6$"
@@ -55,7 +55,11 @@ class CRYPTPasswordManager(object):
 
     def available(self, prefix):
         # Lame 'is implemented' check.
-        l = len(self._crypt('implemented?', prefix + 'xyzzy'))
+        try:
+            l = len(self._crypt('implemented?', prefix + 'xyzzy'))
+        except TypeError:
+            # crypt may return None if prefix is unrecognized
+            return False
         if prefix == OLDCRYPT:
             if l != 13:
                return False
