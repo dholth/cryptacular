@@ -1,0 +1,37 @@
+
+[build-system]
+requires = ["pytoml>=0.1", "enscons"]
+
+[tool]
+
+[tool.enscons]
+name = "cryptacular"
+version = "1.5.0"
+description = "A password hashing framework with bcrypt and pbkdf2."
+classifiers = ["Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: C",
+    "Topic :: Security :: Cryptography"]
+keywords = ["bcrypt", "password", "security", "pbkdf2", "crypt", "hash"]
+author = "Daniel Holth"
+author_email = "dholth@fastmail.fm"
+url = "http://bitbucket.org/dholth/cryptacular/"
+license = "MIT"
+install_requires = ["pbkdf2", "setuptools"]
+tests_require = ["nose", "coverage"]
+packages = ["cryptacular", 
+    "cryptacular.bcrypt", 
+    "cryptacular.core", 
+    "cryptacular.crypt", 
+    "cryptacular.pbkdf2"]
+description_file="README.txt"
+
+[tool.enscons.extras_require]
+test = ["nose", "coverage"]

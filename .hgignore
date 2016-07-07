@@ -4,7 +4,13 @@ syntax: glob
 *.orig
 *.egg
 *.so
+*.os
 .coverage
+.tox
+.scons*
+cryptacular-*
+MANIFEST
+PKG-INFO
 
 syntax: regexp
 

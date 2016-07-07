@@ -11,7 +11,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 tests_require = ["nose", "coverage"]
 
 setup(name='cryptacular',
-      version='1.4.1',
+      version='1.5.0',
       description='A password hashing framework with bcrypt and pbkdf2.',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
@@ -19,10 +19,9 @@ setup(name='cryptacular',
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Programming Language :: C",

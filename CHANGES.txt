@@ -1,3 +1,8 @@
+1.5.0
+=====
+- Add enscons build
+- Update system crypt detection
+
 1.4.1
 =====
 - Fix pypy support by replacing "if 'unicode' in __builtins__"
