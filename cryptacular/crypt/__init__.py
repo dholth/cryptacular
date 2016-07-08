@@ -88,6 +88,8 @@ class CRYPTPasswordManager(object):
         if not self.match(encoded):
             return False
         rc = self._crypt(password, encoded)
+        if rc == None:  # only if the stored password is not compatible with crypt()
+            return False
         return cryptacular.core._cmp(rc, encoded)
 
     def match(self, hash):
