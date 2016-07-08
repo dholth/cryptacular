@@ -2,6 +2,8 @@
 =====
 - Add enscons build
 - Update system crypt detection
+- Use Py_LIMITED_API on Python 3
+- Use hmac.compare_digest(a, b) for constant-time compare
 
 1.4.1
 =====

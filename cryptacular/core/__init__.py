@@ -27,6 +27,7 @@ __all__ = [
     'check_unicode'
 ]
 
+import hmac
 
 try:
     unicode
@@ -110,4 +111,4 @@ class DelegatingPasswordManager(object):
 
 
 def _cmp(a, b):
-    return a == b
+    return hmac.compare_digest(a, b)
