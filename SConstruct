@@ -1,4 +1,4 @@
-# Starter SConstruct for enscons
+# SConstruct for enscons
 
 import sys
 from distutils import sysconfig
@@ -14,18 +14,26 @@ for tag in wheel.pep425tags.get_supported():
     if not 'manylinux' in tag:
         break
 
-# full_tag = py2.py3-none-any # pure Python packages compatible with 2+3
+if sys.version_info[0] == 3:
+    # This extension will work with Python 3.2+ using Py_LIMITED_API
+    full_tag = "cp3-abi3-linux_x86_64"
 
-env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.distutool],
+env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
                   PACKAGE_METADATA=metadata,
                   WHEEL_TAG=full_tag,
-                  ROOT_IS_PURELIB=False)
+                  ROOT_IS_PURELIB=False,)
 
 # ask distutils what the extension filename should be
 from distutils import dist
 from distutils.command.build_ext import build_ext
 ext = build_ext(dist.Distribution(dict(name='cryptacular')))
-ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
+# ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
+ext_filename = 'cryptacular/bcrypt/_bcrypt'
+
+import imp
+for (suffix, _, _) in imp.get_suffixes():
+    if 'abi3' in suffix:
+        ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
 
 extension = env.SharedLibrary(target=ext_filename,
         source=['crypt_blowfish-1.2/crypt_blowfish.c',
@@ -33,8 +41,8 @@ extension = env.SharedLibrary(target=ext_filename,
     'crypt_blowfish-1.2/wrapper.c',
     'cryptacular/bcrypt/_bcrypt.c',], 
         LIBPREFIX='',
-        CPPPATH=env['CPPPATH'] + ['crypt_blowfish-1.2'],
-        parse_flags='-DNO_BF_ASM')
+        CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
+        parse_flags='-DNO_BF_ASM -DPy_LIMITED_API')
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
