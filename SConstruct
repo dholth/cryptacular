@@ -56,7 +56,7 @@ sdist_source=FindSourceFiles() + ['PKG-INFO', 'setup.py']
 sdist = env.Package(
         NAME=env['PACKAGE_NAME'],
         VERSION=env['PACKAGE_METADATA']['version'],
-        PACKAGETYPE='src_targz',
+        PACKAGETYPE='src_zip',
         source=sdist_source,
-        target=['/'.join(['dist', env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.tar.gz'])],
+        target=['/'.join(['dist', env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
         )
