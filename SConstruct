@@ -23,6 +23,10 @@ env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyex
                   WHEEL_TAG=full_tag,
                   ROOT_IS_PURELIB=False,)
 
+import pprint
+print("distutils compiler invocation:")
+pprint.pprint(enscons.cpyext.no_build_ext.output)
+
 # ask distutils what the extension filename should be
 from distutils import dist
 from distutils.command.build_ext import build_ext
