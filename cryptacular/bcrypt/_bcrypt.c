@@ -114,7 +114,7 @@ static PyMethodDef _bcrypt_methods[] = {
 
     #define INITERROR return NULL
 
-    PyObject *
+    PyMODINIT_FUNC
     PyInit__bcrypt(void)
 #else
     #define INITERROR return
