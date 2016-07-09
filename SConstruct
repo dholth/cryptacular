@@ -34,10 +34,13 @@ ext = build_ext(dist.Distribution(dict(name='cryptacular')))
 # ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
 ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
 
-import imp
-for (suffix, _, _) in imp.get_suffixes():
-    if 'abi3' in suffix:
-        ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
+if sys.version_info[0] == 3:
+    import imp
+    for (suffix, _, _) in imp.get_suffixes():
+        if 'abi3' in suffix:
+            ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
+else:
+    ext_filename += sysconfig.get_config_vars()['SO']
 
 extension = env.SharedLibrary(target=ext_filename,
         source=['crypt_blowfish-1.2/crypt_blowfish.c',

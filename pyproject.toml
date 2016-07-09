@@ -25,7 +25,7 @@ author_email = "dholth@fastmail.fm"
 url = "http://bitbucket.org/dholth/cryptacular/"
 license = "MIT"
 install_requires = ["pbkdf2", "setuptools"]
-tests_require = ["nose", "coverage"]
+tests_require = ["pytest", "coverage"]
 packages = ["cryptacular", 
     "cryptacular.bcrypt", 
     "cryptacular.core", 
