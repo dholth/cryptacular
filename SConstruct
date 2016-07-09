@@ -1,6 +1,6 @@
 # SConstruct for enscons
 
-import sys
+import sys, os
 from distutils import sysconfig
 import pytoml as toml
 import enscons, enscons.cpyext
@@ -32,7 +32,7 @@ from distutils import dist
 from distutils.command.build_ext import build_ext
 ext = build_ext(dist.Distribution(dict(name='cryptacular')))
 # ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
-ext_filename = 'cryptacular/bcrypt/_bcrypt'
+ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
 
 import imp
 for (suffix, _, _) in imp.get_suffixes():
