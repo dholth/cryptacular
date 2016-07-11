@@ -9,19 +9,24 @@ metadata = dict(toml.load(open('pyproject.toml')))['tool']['enscons']
 
 # most specific binary, non-manylinux1 tag should be at the top of this list
 import wheel.pep425tags
-for tag in wheel.pep425tags.get_supported():
-    full_tag = '-'.join(tag)
-    if not 'manylinux' in tag:
-        break
+full_tag = '-'.join(next(tag for tag in wheel.pep425tags.get_supported() if not 'manylinux' in tag))
+print(full_tag)
 
 if sys.version_info[0] == 3:
-    # This extension will work with Python 3.2+ using Py_LIMITED_API
-    full_tag = "cp3-abi3-linux_x86_64"
+    full_tag = '-'.join(next(tag for tag in wheel.pep425tags.get_supported() if 'abi3' in tag))
+
+MSVC_VERSION = None
+SHLIBSUFFIX = None
+if sys.platform == 'win32':
+    import distutils.msvccompiler
+    MSVC_VERSION = str(distutils.msvccompiler.get_build_version()) # it is a float
+    SHLIBSUFFIX = '.pyd'
 
 env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
                   PACKAGE_METADATA=metadata,
                   WHEEL_TAG=full_tag,
-                  ROOT_IS_PURELIB=False,)
+                  ROOT_IS_PURELIB=False,
+                  MSVC_VERSION=MSVC_VERSION)
 
 import pprint
 print("distutils compiler invocation:")
@@ -45,8 +50,9 @@ extension = env.SharedLibrary(target=ext_filename,
     'crypt_blowfish-1.2/wrapper.c',
     'cryptacular/bcrypt/_bcrypt.c',], 
         LIBPREFIX='',
+        SHLIBSUFFIX=SHLIBSUFFIX,
         CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
-        parse_flags='-DNO_BF_ASM -DPy_LIMITED_API')
+        parse_flags='-DNO_BF_ASM' + '-DPy_LIMITED_API' if sys.platform == 'win32' else '')
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
