@@ -17,16 +17,19 @@ if sys.version_info[0] == 3:
 
 MSVC_VERSION = None
 SHLIBSUFFIX = None
+TARGET_ARCH = None  # only set for win32
 if sys.platform == 'win32':
     import distutils.msvccompiler
     MSVC_VERSION = str(distutils.msvccompiler.get_build_version()) # it is a float
-    SHLIBSUFFIX = '.pyd'
+    SHLIBSUFFIX = '.pyd'    
+    TARGET_ARCH = 'x86_64' if sys.maxsize.bit_length() == 63 else 'x86'
 
 env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
                   PACKAGE_METADATA=metadata,
                   WHEEL_TAG=full_tag,
                   ROOT_IS_PURELIB=False,
-                  MSVC_VERSION=MSVC_VERSION)
+                  MSVC_VERSION=MSVC_VERSION,
+                  TARGET_ARCH=TARGET_ARCH)
 
 import pprint
 print("distutils compiler invocation:")
@@ -42,7 +45,7 @@ ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
 import imp
 for (suffix, _, _) in imp.get_suffixes():
     if 'abi3' in suffix:
-        ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
+        ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX/SHLIBSUFFIX
 
 use_py_limited = (sys.platform == 'win32')  # it seems we are not using just the limited API
 
