@@ -9,19 +9,29 @@ metadata = dict(toml.load(open('pyproject.toml')))['tool']['enscons']
 
 # most specific binary, non-manylinux1 tag should be at the top of this list
 import wheel.pep425tags
-for tag in wheel.pep425tags.get_supported():
-    full_tag = '-'.join(tag)
-    if not 'manylinux' in tag:
-        break
+full_tag = next(tag for tag in wheel.pep425tags.get_supported() if not 'manylinux' in tag)
+print(full_tag)
 
 if sys.version_info[0] == 3:
-    # This extension will work with Python 3.2+ using Py_LIMITED_API
-    full_tag = "cp3-abi3-linux_x86_64"
+    full_tag = next((tag for tag in wheel.pep425tags.get_supported() if 'abi3' in tag), full_tag)
+
+full_tag = '-'.join(full_tag)
+
+MSVC_VERSION = None
+SHLIBSUFFIX = None
+TARGET_ARCH = None  # only set for win32
+if sys.platform == 'win32':
+    import distutils.msvccompiler
+    MSVC_VERSION = str(distutils.msvccompiler.get_build_version()) # it is a float
+    SHLIBSUFFIX = '.pyd'
+    TARGET_ARCH = 'x86_64' if sys.maxsize.bit_length() == 63 else 'x86'
 
 env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
                   PACKAGE_METADATA=metadata,
                   WHEEL_TAG=full_tag,
-                  ROOT_IS_PURELIB=False,)
+                  ROOT_IS_PURELIB=False,
+                  MSVC_VERSION=MSVC_VERSION,
+                  TARGET_ARCH=TARGET_ARCH)
 
 import pprint
 print("distutils compiler invocation:")
@@ -34,13 +44,12 @@ ext = build_ext(dist.Distribution(dict(name='cryptacular')))
 # ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
 ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
 
-if sys.version_info[0] == 3:
-    import imp
-    for (suffix, _, _) in imp.get_suffixes():
-        if 'abi3' in suffix:
-            ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
-else:
-    ext_filename += sysconfig.get_config_vars()['SO']
+import imp
+for (suffix, _, _) in imp.get_suffixes():
+    if 'abi3' in suffix:
+        ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX/SHLIBSUFFIX
+
+use_py_limited = (sys.platform == 'win32')  # it seems we are not using just the limited API
 
 extension = env.SharedLibrary(target=ext_filename,
         source=['crypt_blowfish-1.2/crypt_blowfish.c',
@@ -48,8 +57,9 @@ extension = env.SharedLibrary(target=ext_filename,
     'crypt_blowfish-1.2/wrapper.c',
     'cryptacular/bcrypt/_bcrypt.c',], 
         LIBPREFIX='',
+        SHLIBSUFFIX=SHLIBSUFFIX,
         CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
-        parse_flags='-DNO_BF_ASM -DPy_LIMITED_API')
+        parse_flags='-DNO_BF_ASM' + ' -DPy_LIMITED_API' if use_py_limited else '')
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
