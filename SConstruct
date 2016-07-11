@@ -44,6 +44,8 @@ for (suffix, _, _) in imp.get_suffixes():
     if 'abi3' in suffix:
         ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX
 
+use_py_limited = (sys.platform == 'win32')  # it seems we are not using just the limited API
+
 extension = env.SharedLibrary(target=ext_filename,
         source=['crypt_blowfish-1.2/crypt_blowfish.c',
     'crypt_blowfish-1.2/crypt_gensalt.c',
@@ -52,7 +54,7 @@ extension = env.SharedLibrary(target=ext_filename,
         LIBPREFIX='',
         SHLIBSUFFIX=SHLIBSUFFIX,
         CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
-        parse_flags='-DNO_BF_ASM' + '-DPy_LIMITED_API' if sys.platform == 'win32' else '')
+        parse_flags='-DNO_BF_ASM' + ' -DPy_LIMITED_API' if use_py_limited else '')
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
