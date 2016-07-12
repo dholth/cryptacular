@@ -62,7 +62,7 @@ extension = env.SharedLibrary(target=ext_filename,
         LIBPREFIX='',
         SHLIBSUFFIX=SHLIBSUFFIX,
         CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
-        parse_flags='-DNO_BF_ASM' + ' -DPy_LIMITED_API' if use_py_limited else '')
+        parse_flags='-DNO_BF_ASM' + ' -DPy_LIMITED_API=0x03030000' if use_py_limited else '')
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
