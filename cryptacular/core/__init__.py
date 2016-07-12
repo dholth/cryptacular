@@ -111,4 +111,6 @@ class DelegatingPasswordManager(object):
 
 
 def _cmp(a, b):
+    a = check_unicode(a)
+    b = check_unicode(b)
     return hmac.compare_digest(a, b)

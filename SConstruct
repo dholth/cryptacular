@@ -12,11 +12,13 @@ metadata = dict(toml.load(open('pyproject.toml')))['tool']['enscons']
 
 # most specific binary, non-manylinux1 tag should be at the top of this list
 import wheel.pep425tags
-full_tag = '-'.join(next(tag for tag in wheel.pep425tags.get_supported() if not 'manylinux' in tag))
+full_tag = next(tag for tag in wheel.pep425tags.get_supported() if not 'manylinux' in tag)
 print(full_tag)
 
 if sys.version_info[0] == 3:
-    full_tag = '-'.join(next(tag for tag in wheel.pep425tags.get_supported() if 'abi3' in tag))
+    full_tag = next((tag for tag in wheel.pep425tags.get_supported() if 'abi3' in tag), full_tag)
+
+full_tag = '-'.join(full_tag)
 
 MSVC_VERSION = None
 SHLIBSUFFIX = None
@@ -24,7 +26,7 @@ TARGET_ARCH = None  # only set for win32
 if sys.platform == 'win32':
     import distutils.msvccompiler
     MSVC_VERSION = str(distutils.msvccompiler.get_build_version()) # it is a float
-    SHLIBSUFFIX = '.pyd'    
+    SHLIBSUFFIX = '.pyd'
     TARGET_ARCH = 'x86_64' if sys.maxsize.bit_length() == 63 else 'x86'
 
 env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
