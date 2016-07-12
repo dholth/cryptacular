@@ -76,5 +76,7 @@ sdist = env.Package(
         VERSION=env['PACKAGE_METADATA']['version'],
         PACKAGETYPE='src_zip',
         source=sdist_source,
-        target=['/'.join(['dist', env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
+        target=['/'.join([env['DIST_BASE'], env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
         )
+
+env.Alias('sdist', sdist)

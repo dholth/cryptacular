@@ -34,4 +34,4 @@ packages = ["cryptacular",
 description_file="README.txt"
 
 [tool.enscons.extras_require]
-test = ["nose", "coverage"]
+test = ["pytest", "pytest-cov", "coverage"]
