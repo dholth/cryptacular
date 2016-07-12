@@ -66,7 +66,11 @@ extension = env.SharedLibrary(target=ext_filename,
 
 # Only *.py is included automatically by setup2toml.
 # Add extra 'purelib' files or package_data here.
-py_source = Glob('cryptacular/*.py') + Glob('cryptacular/bcrypt/*.py') + Glob('cryptacular/core/*.py') + Glob('cryptacular/crypt/*.py') + Glob('cryptacular/pbkdf2/*.py')
+py_source = (Glob('cryptacular/*.py') +
+    Glob('cryptacular/bcrypt/*.py') +
+    Glob('cryptacular/core/*.py') +
+    Glob('cryptacular/crypt/*.py') +
+    Glob('cryptacular/pbkdf2/*.py'))
 
 env.Whl('platlib', py_source + extension, root='')
 
@@ -78,5 +82,7 @@ sdist = env.Package(
         VERSION=env['PACKAGE_METADATA']['version'],
         PACKAGETYPE='src_zip',
         source=sdist_source,
-        target=['/'.join(['dist', env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
+        target=['/'.join([env['DIST_BASE'], env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
         )
+
+env.Alias('sdist', sdist)
