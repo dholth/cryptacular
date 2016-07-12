@@ -1,4 +1,7 @@
-# SConstruct for enscons
+#
+# Build cryptacular.
+# 'python -m SCons' or run setup.py
+#
 
 import sys, os
 from distutils import sysconfig
@@ -47,7 +50,7 @@ for (suffix, _, _) in imp.get_suffixes():
     if 'abi3' in suffix:
         ext_filename  += suffix # SCons doesn't like double-extensions .a.b in LIBSUFFIX/SHLIBSUFFIX
 
-use_py_limited = (sys.platform == 'win32')  # it seems we are not using just the limited API
+use_py_limited = 'abi3' in full_tag
 
 extension = env.SharedLibrary(target=ext_filename,
         source=['crypt_blowfish-1.2/crypt_blowfish.c',

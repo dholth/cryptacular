@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 
-#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "ow-crypt.h"
 
