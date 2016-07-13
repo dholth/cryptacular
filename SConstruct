@@ -77,7 +77,7 @@ whl = env.Whl('platlib', py_source + extension, root='')
 # Add automatic source files, plus any other needed files.
 sdist_source=(FindSourceFiles() + 
         ['PKG-INFO', 'setup.py'] + 
-        Glob('crypt_blowfish-1.2/*', exclude=['*.os']))
+        Glob('crypt_blowfish-1.2/*', exclude=['crypt_blowfish-1.2/*.os']))
 
 sdist = env.Package(
         NAME=env['PACKAGE_NAME'],
