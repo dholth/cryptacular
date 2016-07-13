@@ -72,10 +72,12 @@ py_source = (Glob('cryptacular/*.py') +
     Glob('cryptacular/crypt/*.py') +
     Glob('cryptacular/pbkdf2/*.py'))
 
-env.Whl('platlib', py_source + extension, root='')
+whl = env.Whl('platlib', py_source + extension, root='')
 
 # Add automatic source files, plus any other needed files.
-sdist_source=FindSourceFiles() + ['PKG-INFO', 'setup.py']
+sdist_source=(FindSourceFiles() + 
+        ['PKG-INFO', 'setup.py'] + 
+        Glob('crypt_blowfish-1.2/*', exclude=['*.os']))
 
 sdist = env.Package(
         NAME=env['PACKAGE_NAME'],
@@ -86,3 +88,10 @@ sdist = env.Package(
         )
 
 env.Alias('sdist', sdist)
+
+install = env.Command("#DUMMY", whl, 
+    ' '.join([sys.executable, '-m', 'pip', 'install', '--no-deps', '$SOURCE']))
+env.Alias('install', install)
+env.AlwaysBuild(install)
+
+env.Default(whl, sdist)
