@@ -32,7 +32,6 @@ if sys.platform == 'win32':
 env = Environment(tools=['default', 'packaging', enscons.generate, enscons.cpyext.generate],
                   PACKAGE_METADATA=metadata,
                   WHEEL_TAG=full_tag,
-                  ROOT_IS_PURELIB=False,
                   MSVC_VERSION=MSVC_VERSION,
                   TARGET_ARCH=TARGET_ARCH)
 
@@ -72,21 +71,15 @@ py_source = (Glob('cryptacular/*.py') +
     Glob('cryptacular/crypt/*.py') +
     Glob('cryptacular/pbkdf2/*.py'))
 
-whl = env.Whl('platlib', py_source + extension, root='')
+platlib = env.Whl('platlib', py_source + extension, root='')
+whl = env.WhlFile(source=platlib)
 
 # Add automatic source files, plus any other needed files.
-sdist_source=(FindSourceFiles() + 
+sdist_source=list(set(FindSourceFiles() + 
         ['PKG-INFO', 'setup.py'] + 
-        Glob('crypt_blowfish-1.2/*', exclude=['crypt_blowfish-1.2/*.os']))
+        Glob('crypt_blowfish-1.2/*', exclude=['crypt_blowfish-1.2/*.os'])))
 
-sdist = env.Package(
-        NAME=env['PACKAGE_NAME'],
-        VERSION=env['PACKAGE_METADATA']['version'],
-        PACKAGETYPE='src_zip',
-        source=sdist_source,
-        target=['/'.join([env['DIST_BASE'], env['PACKAGE_NAME'] + '-' + env['PACKAGE_VERSION'] + '.zip'])],
-        )
-
+sdist = env.SDist(source=sdist_source)
 env.Alias('sdist', sdist)
 
 install = env.Command("#DUMMY", whl, 
