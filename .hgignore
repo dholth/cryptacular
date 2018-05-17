@@ -5,6 +5,10 @@ syntax: glob
 *.egg
 *.so
 .coverage
+.tox
+cryptacular-*
+.cache
+.sconsign
 
 syntax: regexp
 
