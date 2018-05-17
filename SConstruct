@@ -43,8 +43,8 @@ pprint.pprint(enscons.cpyext.no_build_ext.output)
 from distutils import dist
 from distutils.command.build_ext import build_ext
 ext = build_ext(dist.Distribution(dict(name='cryptacular')))
-# ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
-ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
+ext_filename = ext.get_ext_filename('cryptacular.bcrypt._bcrypt')
+# ext_filename = os.path.join('cryptacular', 'bcrypt', '_bcrypt')
 
 import imp
 for (suffix, _, _) in imp.get_suffixes():
@@ -61,6 +61,7 @@ extension = env.SharedLibrary(target=ext_filename,
         LIBPREFIX='',
         SHLIBSUFFIX=SHLIBSUFFIX,
         CPPPATH=['crypt_blowfish-1.2'] + env['CPPPATH'],
+        CPPFLAGS=['-D__SKIP_GNU'],
         parse_flags='-DNO_BF_ASM' + ' -DPy_LIMITED_API=0x03030000' if use_py_limited else '')
 
 # Only *.py is included automatically by setup2toml.

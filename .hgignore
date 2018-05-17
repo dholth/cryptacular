@@ -10,6 +10,7 @@ syntax: glob
 .scons*
 .*
 cryptacular-*
+setup-requires
 MANIFEST
 PKG-INFO
 
