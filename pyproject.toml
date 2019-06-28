@@ -1,8 +1,6 @@
-
 [build-system]
 requires = ["pytoml>=0.1", "enscons"]
-
-[tool]
+build-backend = "enscons.api"
 
 [tool.enscons]
 name = "cryptacular"
