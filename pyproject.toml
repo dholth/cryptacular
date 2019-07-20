@@ -1,10 +1,10 @@
 [build-system]
-requires = ["pytoml>=0.1", "enscons>=0.21"]
+requires = ["pytoml>=0.1", "enscons>=0.21.1"]
 build-backend = "enscons.api"
 
 [tool.enscons]
 name = "cryptacular"
-version = "1.5.2"
+version = "1.5.3"
 description = "A password hashing framework with bcrypt and pbkdf2."
 classifiers = ["Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
