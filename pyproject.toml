@@ -1,10 +1,10 @@
 [build-system]
-requires = ["pytoml>=0.1", "enscons"]
+requires = ["pytoml>=0.1", "enscons>=0.21"]
 build-backend = "enscons.api"
 
 [tool.enscons]
 name = "cryptacular"
-version = "1.5.1"
+version = "1.5.2"
 description = "A password hashing framework with bcrypt and pbkdf2."
 classifiers = ["Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -24,10 +24,10 @@ url = "http://bitbucket.org/dholth/cryptacular/"
 license = "MIT"
 install_requires = ["pbkdf2", "setuptools"]
 tests_require = ["pytest", "coverage"]
-packages = ["cryptacular", 
-    "cryptacular.bcrypt", 
-    "cryptacular.core", 
-    "cryptacular.crypt", 
+packages = ["cryptacular",
+    "cryptacular.bcrypt",
+    "cryptacular.core",
+    "cryptacular.crypt",
     "cryptacular.pbkdf2"]
 description_file="README.txt"
 

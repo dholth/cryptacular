@@ -3,14 +3,14 @@
 # `scons` or run setup.py
 #
 
-import sys, os
+import sys, os, os.path
 import distutils.sysconfig
 import pytoml as toml
 import enscons, enscons.cpyext
 
 metadata = dict(toml.load(open("pyproject.toml")))["tool"]["enscons"]
 
-full_tag = enscons.get_binary_tag()  # could choose abi3 tag
+full_tag = enscons.get_abi3_tag()
 
 MSVC_VERSION = None
 SHLIBSUFFIX = None
@@ -30,18 +30,11 @@ env = Environment(
     TARGET_ARCH=TARGET_ARCH,
 )
 
-ext = enscons.cpyext.get_build_ext("cryptacular")
-ext_filename = ext.get_ext_filename("cryptacular.bcrypt._bcrypt")
-
-import imp
-
-for (suffix, _, _) in imp.get_suffixes():
-    if "abi3" in suffix:
-        ext_filename += (
-            suffix
-        )  # SCons doesn't like double-extensions .a.b in LIBSUFFIX/SHLIBSUFFIX
-
 use_py_limited = "abi3" in full_tag
+
+ext_filename = enscons.cpyext.extension_filename(
+    "cryptacular.bcrypt._bcrypt", abi3=use_py_limited
+)
 
 extension = env.SharedLibrary(
     target=ext_filename,
