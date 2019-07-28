@@ -78,4 +78,7 @@ sdist_source = list(
 sdist = env.SDist(source=sdist_source)
 env.Alias("sdist", sdist)
 
+develop = env.Command("#DEVELOP", enscons.egg_info_targets(env), enscons.develop)
+env.Alias("develop", develop)
+
 env.Default(whl, sdist)
