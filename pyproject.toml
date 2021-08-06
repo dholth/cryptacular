@@ -4,7 +4,7 @@ build-backend = "enscons.api"
 
 [tool.enscons]
 name = "cryptacular"
-version = "1.5.5"
+version = "1.6.0"
 description = "A password hashing framework with bcrypt and pbkdf2."
 classifiers = ["Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -12,7 +12,7 @@ classifiers = ["Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: C",
@@ -20,7 +20,7 @@ classifiers = ["Development Status :: 5 - Production/Stable",
 keywords = ["bcrypt", "password", "security", "pbkdf2", "crypt", "hash"]
 author = "Daniel Holth"
 author_email = "dholth@fastmail.fm"
-url = "http://bitbucket.org/dholth/cryptacular/"
+url = "https://github.com/dholth/cryptacular/"
 license = "MIT"
 install_requires = ["pbkdf2", "setuptools"]
 tests_require = ["pytest", "coverage"]

@@ -4,6 +4,7 @@ from nose.tools import *
 from cryptacular.core import *
 
 if sys.hexversion < 0x3000000:
+
     def test_doctest():
         """
         >>> import cryptacular.core
@@ -46,30 +47,38 @@ if sys.hexversion < 0x3000000:
         True
         """
 
+
 @raises(ValueError)
 def test_bad_check():
     import cryptacular.core
     import cryptacular.bcrypt
     import cryptacular.pbkdf2
+
     bcrypt = cryptacular.bcrypt.BCRYPTPasswordManager()
     pbkdf2 = cryptacular.pbkdf2.PBKDF2PasswordManager()
-    delegator = cryptacular.core.DelegatingPasswordManager(preferred=bcrypt, fallbacks=(pbkdf2,))
-    delegator.check('{notahash}#', 'wurble')
+    delegator = cryptacular.core.DelegatingPasswordManager(
+        preferred=bcrypt, fallbacks=(pbkdf2,)
+    )
+    delegator.check("{notahash}#", "wurble")
+
 
 def test_interfaces():
     checker = PasswordChecker()
+
     @raises(NotImplementedError)
     def check():
-        checker.check('foo', 'foo')
+        checker.check("foo", "foo")
+
     check()
-    checker.PREFIX = '{foo}'
-    assert_true(checker.match('{foo}bar'))
+    checker.PREFIX = "{foo}"
+    assert_true(checker.match("{foo}bar"))
     eq_(PasswordChecker().SCHEME, None)
     eq_(PasswordChecker().PREFIX, None)
 
     manager = PasswordManager()
+
     @raises(NotImplementedError)
     def encode():
-        manager.encode('foo')
-    encode()
+        manager.encode("foo")
 
+    encode()
