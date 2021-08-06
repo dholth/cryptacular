@@ -39,14 +39,14 @@ ext_filename = enscons.cpyext.extension_filename(
 extension = env.SharedLibrary(
     target=ext_filename,
     source=[
-        "crypt_blowfish-1.2/crypt_blowfish.c",
-        "crypt_blowfish-1.2/crypt_gensalt.c",
-        "crypt_blowfish-1.2/wrapper.c",
+        "crypt_blowfish-1.3/crypt_blowfish.c",
+        "crypt_blowfish-1.3/crypt_gensalt.c",
+        "crypt_blowfish-1.3/wrapper.c",
         "cryptacular/bcrypt/_bcrypt.c",
     ],
     LIBPREFIX="",
     SHLIBSUFFIX=SHLIBSUFFIX,
-    CPPPATH=["crypt_blowfish-1.2"] + env["CPPPATH"],
+    CPPPATH=["crypt_blowfish-1.3"] + env["CPPPATH"],
     CPPFLAGS=["-D__SKIP_GNU"],
     parse_flags="-DNO_BF_ASM" + " -DPy_LIMITED_API=0x03030000"
     if use_py_limited
