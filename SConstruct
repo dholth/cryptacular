@@ -10,7 +10,7 @@ import enscons, enscons.cpyext
 
 metadata = dict(toml.load(open("pyproject.toml")))["tool"]["enscons"]
 
-full_tag = enscons.get_abi3_tag()
+full_tag = enscons.get_binary_tag()
 
 MSVC_VERSION = None
 SHLIBSUFFIX = None
