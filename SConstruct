@@ -42,6 +42,7 @@ extension = env.SharedLibrary(
     target=ext_filename,
     source=[
         CRYPT_BLOWFISH + "/crypt_blowfish.c",
+        CRYPT_BLOWFISH + "/crypt_gensalt.c",
         CRYPT_BLOWFISH + "/wrapper.c",
         "cryptacular/bcrypt/_bcrypt.c",
     ],
