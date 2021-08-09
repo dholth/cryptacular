@@ -12,6 +12,8 @@ metadata = dict(toml.load(open("pyproject.toml")))["tool"]["enscons"]
 
 full_tag = enscons.get_binary_tag()
 
+CRYPT_BLOWFISH = "crypt_blowfish-1.3"
+
 MSVC_VERSION = None
 SHLIBSUFFIX = None
 TARGET_ARCH = None  # only set for win32
@@ -39,14 +41,14 @@ ext_filename = enscons.cpyext.extension_filename(
 extension = env.SharedLibrary(
     target=ext_filename,
     source=[
-        "crypt_blowfish-1.3/crypt_blowfish.c",
-        "crypt_blowfish-1.3/crypt_gensalt.c",
-        "crypt_blowfish-1.3/wrapper.c",
+        CRYPT_BLOWFISH + "/crypt_blowfish.c",
+        CRYPT_BLOWFISH + "/crypt_gensalt.c",
+        CRYPT_BLOWFISH + "/wrapper.c",
         "cryptacular/bcrypt/_bcrypt.c",
     ],
     LIBPREFIX="",
     SHLIBSUFFIX=SHLIBSUFFIX,
-    CPPPATH=["crypt_blowfish-1.3"] + env["CPPPATH"],
+    CPPPATH=[CRYPT_BLOWFISH] + env["CPPPATH"],
     CPPFLAGS=["-D__SKIP_GNU"],
     parse_flags="-DNO_BF_ASM" + " -DPy_LIMITED_API=0x03030000"
     if use_py_limited
@@ -71,12 +73,13 @@ sdist_source = list(
     set(
         FindSourceFiles()
         + ["PKG-INFO", "setup.py"]
-        + Glob("crypt_blowfish-1.2/*", exclude=["crypt_blowfish-1.2/*.os"])
+        + Glob(CRYPT_BLOWFISH + "/*", exclude=[CRYPT_BLOWFISH + "*.os"])
     )
 )
 
 sdist = env.SDist(source=sdist_source)
 env.Alias("sdist", sdist)
+env.NoClean(sdist)
 
 develop = env.Command("#DEVELOP", enscons.egg_info_targets(env), enscons.develop)
 env.Alias("develop", develop)
