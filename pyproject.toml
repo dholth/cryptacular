@@ -4,7 +4,7 @@ build-backend = "enscons.api"
 
 [tool.enscons]
 name = "cryptacular"
-version = "1.6.1"
+version = "1.6.2"
 description = "A password hashing framework with bcrypt and pbkdf2."
 classifiers = ["Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -13,6 +13,7 @@ classifiers = ["Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: C",

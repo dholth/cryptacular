@@ -32,8 +32,14 @@ Usage::
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['CRYPTPasswordManager', 'OLDCRYPT', 'MD5CRYPT', 'SHA256CRYPT',
-    'SHA512CRYPT', 'BCRYPT']
+__all__ = [
+    "CRYPTPasswordManager",
+    "OLDCRYPT",
+    "MD5CRYPT",
+    "SHA256CRYPT",
+    "SHA512CRYPT",
+    "BCRYPT",
+]
 
 import os
 import re
@@ -56,13 +62,14 @@ class CRYPTPasswordManager(object):
     def available(self, prefix):
         # Lame 'is implemented' check.
         try:
-            l = len(self._crypt('implemented?', prefix + 'xyzzy'))
-        except TypeError:
+            l = len(self._crypt("implemented?", prefix + "xyzzy"))
+        except (TypeError, OSError):
             # crypt may return None if prefix is unrecognized
+            # or raise OSError in Python 3.9+
             return False
         if prefix == OLDCRYPT:
             if l != 13:
-               return False
+                return False
         elif l < 26:
             return False
         return True
@@ -76,7 +83,7 @@ class CRYPTPasswordManager(object):
     def encode(self, password):
         """Hash a password using the builtin crypt module."""
         salt = self.PREFIX
-        salt += base64.b64encode(os.urandom(12), altchars=b'./').decode('utf-8')
+        salt += base64.b64encode(os.urandom(12), altchars=b"./").decode("utf-8")
         password = check_unicode(password)
         rc = self._crypt(password, salt)
         return rc
@@ -95,4 +102,3 @@ class CRYPTPasswordManager(object):
     def match(self, hash):
         """Return True if hash starts with our prefix."""
         return hash.startswith(self.PREFIX)
-

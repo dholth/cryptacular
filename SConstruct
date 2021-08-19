@@ -30,6 +30,7 @@ env = Environment(
     WHEEL_TAG=full_tag,
     MSVC_VERSION=MSVC_VERSION,
     TARGET_ARCH=TARGET_ARCH,
+    ENV=os.environ,
 )
 
 use_py_limited = "abi3" in full_tag
@@ -49,7 +50,7 @@ extension = env.SharedLibrary(
     LIBPREFIX="",
     SHLIBSUFFIX=SHLIBSUFFIX,
     CPPPATH=[CRYPT_BLOWFISH] + env["CPPPATH"],
-    CPPFLAGS=["-D__SKIP_GNU"],
+    CPPFLAGS=["-D__SKIP_GNU", "-DPY_SSIZE_T_CLEAN"],
     parse_flags="-DNO_BF_ASM" + " -DPy_LIMITED_API=0x03030000"
     if use_py_limited
     else "",
