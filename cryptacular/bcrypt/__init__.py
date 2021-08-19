@@ -37,7 +37,7 @@ class BCRYPTPasswordManager(object):
     PREFIX = "$2a$"
     _rounds = 10
 
-    _bcrypt_syntax = re.compile("\$2a\$[0-9]{2}\$[./A-Za-z0-9]{53}")
+    _bcrypt_syntax = re.compile(r"\$2a\$[0-9]{2}\$[./A-Za-z0-9]{53}")
 
     def encode(self, text, rounds=None):
         """Hash a password using bcrypt.
