@@ -21,29 +21,33 @@
 # THE SOFTWARE.
 
 __all__ = [
-    'DelegatingPasswordManager',
-    'PasswordChecker',
-    'PasswordManager',
-    'check_unicode'
+    "DelegatingPasswordManager",
+    "PasswordChecker",
+    "PasswordManager",
+    "check_unicode",
 ]
 
 import hmac
 
 try:
     unicode
+
     def check_unicode(text):
         if isinstance(text, unicode):
-            text = text.encode('utf-8')
+            text = text.encode("utf-8")
         if not isinstance(text, str):
             raise TypeError()
         return text
+
+
 except NameError:
+
     def check_unicode(text):
         # In Python3, PyArg_ParseTuple("ss") in the builtin crypt module
         # and our _bcrypt.c encodes unicode as utf-8, which falls short
         # of dealing with bytes but is nearly what we want.
         if not isinstance(text, str):
-            raise TypeError('expected str')
+            raise TypeError("expected str")
         return text
 
 
@@ -69,10 +73,8 @@ class PasswordChecker(object):
 
 
 class PasswordManager(PasswordChecker):
-
     def encode(self, password):
-        """Return hash of 'password' using this scheme.
-        """
+        """Return hash of 'password' using this scheme."""
         raise NotImplementedError()
 
 
@@ -82,7 +84,7 @@ class DelegatingPasswordManager(object):
     PREFIX = None
 
     def __init__(self, fallbacks=(), **kwargs):
-        self._managers = [kwargs['preferred']]
+        self._managers = [kwargs["preferred"]]
         self._managers.extend(fallbacks)
 
     @property

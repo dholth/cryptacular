@@ -9,6 +9,7 @@ try:
 except NameError:
     unicode = str
 
+
 class TestBCRYPTPasswordManager(object):
     snowpass = "hashy the \N{SNOWMAN}"
 
@@ -21,21 +22,28 @@ class TestBCRYPTPasswordManager(object):
 
     @raises(TypeError)
     def test_None2(self):
-        self.manager.check(None, 'xyzzy')
+        self.manager.check(None, "xyzzy")
 
     @raises(TypeError)
     def test_None3(self):
-        hash = self.manager.encode('xyzzy')
+        hash = self.manager.encode("xyzzy")
         self.manager.check(hash, None)
 
     def test_badhash(self):
-        eq_(self.manager.check('$p5k2$400$ZxK4ZBJCfQg=$kBpklVI9kA13kP32HMZL0rloQ1M=', self.snowpass), False)
+        eq_(
+            self.manager.check(
+                "$p5k2$400$ZxK4ZBJCfQg=$kBpklVI9kA13kP32HMZL0rloQ1M=", self.snowpass
+            ),
+            False,
+        )
 
     @raises(ValueError)
     def test_shorthash(self):
         manager = BCRYPTPasswordManager()
+
         def match(hash):
             return True
+
         manager.match = match
         short_hash = manager.encode(self.snowpass)[:28]
         assert_true(manager.match(short_hash))
@@ -50,7 +58,7 @@ class TestBCRYPTPasswordManager(object):
         self.manager.encode(self.snowpass, rounds=100)
 
     def test_emptypass(self):
-        self.manager.encode('')
+        self.manager.encode("")
 
     def test_general(self):
         manager = self.manager
@@ -66,25 +74,31 @@ class TestBCRYPTPasswordManager(object):
         assert_not_equal(manager.encode(password), manager.encode(password))
         hash = manager.encode(password, rounds=4)
         assert_true(manager.check(hash, password))
-    
+
     @raises(ValueError)
     def test_fail_1(self):
-        def return_none(*args): return None
+        def return_none(*args):
+            return None
+
         bcrypt = BCRYPTPasswordManager()
         bcrypt.crypt_gensalt_rn = return_none
-        bcrypt.encode('foo')
+        bcrypt.encode("foo")
 
     @raises(ValueError)
     def test_fail_2(self):
-        def return_none(*args): return None
-        bcrypt = BCRYPTPasswordManager()        
+        def return_none(*args):
+            return None
+
+        bcrypt = BCRYPTPasswordManager()
         bcrypt.crypt_rn = return_none
-        bcrypt.encode('foo')
+        bcrypt.encode("foo")
 
     @raises(ValueError)
     def test_fail_3(self):
-        def return_none(*args): return None
+        def return_none(*args):
+            return None
+
         bcrypt = BCRYPTPasswordManager()
-        pw = bcrypt.encode('foobar')
+        pw = bcrypt.encode("foobar")
         bcrypt.crypt_rn = return_none
-        bcrypt.check(pw, 'foo')
+        bcrypt.check(pw, "foo")
